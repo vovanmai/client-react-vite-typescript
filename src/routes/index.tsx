@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "@/components/layouts/RootLayout";
 import About from "@/components/About";
+import Test from "@/components/Test";
 
 const check = (data:any) => {
   console.log(data)
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "blogs",
         element: (<h1>This is blogs pages</h1>),
+      },
+      {
+        path: "test",
+        element: <Test/>,
       }
     ]
   }
