@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, Suspense } from "react"
 import { ConfigProvider } from 'antd'
 import theme from "@/configs/theme"
 import router from "@/routes";
@@ -8,7 +8,9 @@ const App:FC = () => (
   <ConfigProvider
     theme={theme}
   >
-    <RouterProvider router={router} />
+    <Suspense fallback={<h1>Loading....</h1>}>
+      <RouterProvider router={router} />
+    </Suspense>
   </ConfigProvider>
 );
 

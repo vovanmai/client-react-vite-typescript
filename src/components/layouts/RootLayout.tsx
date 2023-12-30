@@ -4,10 +4,13 @@ const RootLayout = () => {
   return (
     <>
       <div>
-        <Link to="about/123456">About Us</Link>
+        <Link to="about">About Us</Link>
       </div>
       <div>
         <Link to="blogs">Blogs</Link>
+      </div>
+      <div>
+        <Link to="contact">Contact</Link>
       </div>
 
       <div>

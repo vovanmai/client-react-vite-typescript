@@ -2,6 +2,10 @@ import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "@/components/layouts/RootLayout";
 import About from "@/components/About";
 import Test from "@/components/Test";
+import * as React from "react";
+
+const Contact = React.lazy(() => import('@/components/Contact'));
+const Blog = React.lazy(() => import('@/components/Blog'));
 
 const check = (data:any) => {
   console.log(data)
@@ -18,17 +22,21 @@ const router = createBrowserRouter([
         element: (<h1>This is home pages</h1>),
       },
       {
-        path: "about/:id",
+        path: "about",
         element: <About/>,
         loader: check
       },
       {
         path: "blogs",
-        element: (<h1>This is blogs pages</h1>),
+        element: <Blog/>,
       },
       {
         path: "test",
         element: <Test/>,
+      },
+      {
+        path: "contact",
+        element: <Contact/>,
       }
     ]
   }
