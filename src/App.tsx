@@ -1,16 +1,19 @@
-import { FC, Suspense } from "react"
+import { Provider } from "react-redux"
+import { FC } from "react"
 import { ConfigProvider } from 'antd'
 import theme from "@/configs/theme"
 import router from "@/routes";
 import { RouterProvider } from "react-router-dom";
 
+import store from '@/store/index'
+
 const App:FC = () => (
   <ConfigProvider
     theme={theme}
   >
-    <Suspense fallback={<h1>Loading....</h1>}>
+    <Provider store={store}>
       <RouterProvider router={router} />
-    </Suspense>
+    </Provider>
   </ConfigProvider>
 );
 
