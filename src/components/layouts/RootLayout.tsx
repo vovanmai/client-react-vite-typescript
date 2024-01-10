@@ -1,49 +1,59 @@
 import { Outlet } from "react-router-dom"
 
-import * as React from 'react';
 import {
-  AppstoreOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  ShopOutlined,
-  TeamOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Layout, Menu } from 'antd';
+  FC,
+  useState,
+  useEffect
+} from 'react';
 
-const { Header, Content, Footer, Sider } = Layout;
+import {
+  Layout,
+} from 'antd';
 
-const items: MenuProps['items'] = [
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  CloudOutlined,
-  CloudOutlined,
-  CloudOutlined,
-  CloudOutlined,
-  CloudOutlined,
-  CloudOutlined,
-  CloudOutlined,
-  AppstoreOutlined,
-  TeamOutlined,
-  ShopOutlined,
-  ShopOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: React.createElement(icon),
-  label: `nav ${index + 1}`,
-}));
+const { Header, Content, Sider } = Layout;
+import SideBarLayout from "@/components/layouts/SideBarLayout"
 
-const RootLayout: React.FC = () => {
+const RootLayout: FC = () => {
+  const [marginLeft, setMarginLeft] = useState(200)
+  const [isShowSider, setIsShowSider] = useState(true)
+  const [appName, setAppName] = useState('Mana4.0')
+
+
+  useEffect(() => {
+    if (window.innerWidth > 768) {
+      setMarginLeft(200)
+      setIsShowSider(true)
+    } else {
+      setMarginLeft(0)
+      setIsShowSider(false)
+    }
+    const handleWindowResize = () => {
+      if (window.innerWidth > 768) {
+        setMarginLeft(200)
+        setIsShowSider(true)
+      } else {
+        setMarginLeft(0)
+        setIsShowSider(false)
+      }
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+  }, []);
   return (
-    <Layout hasSider>
+    <Layout style={{height: "100%"}}>
+      {isShowSider &&
       <Sider
         collapsible
+        onCollapse={(collapsed) => {
+          console.log(collapsed)
+          if (collapsed) {
+            setMarginLeft(80)
+            setAppName('M4.0')
+          } else {
+            setMarginLeft(200)
+            setAppName('Mana4.0')
+          }
+        }}
         style={{
           position: 'fixed',
           left: 0,
@@ -53,17 +63,17 @@ const RootLayout: React.FC = () => {
       >
         <div style={{ display: "flex", flexDirection: "column", height: "100%"}}>
           <div style={{color: "#ffffff", height: "50px"}}>
-            <h1>Mana4.0</h1>
+            <h1 style={{ textAlign: "center"}}>{ appName }</h1>
           </div>
-          <Menu style={{flex: 1, overflowY: "auto"}} theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
+          <SideBarLayout></SideBarLayout>
         </div>
       </Sider>
-      <Layout style={{ marginLeft: 200 }}>
+      }
+      <Layout style={{ marginLeft: marginLeft }}>
         <Header style={{ padding: 0, background: '#ffffff' }} />
         <Content>
           <Outlet></Outlet>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>Mana4.0 ©2023 Created by Lionel Vo</Footer>
       </Layout>
     </Layout>
   );

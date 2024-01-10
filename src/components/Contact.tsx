@@ -1,5 +1,5 @@
 import { decrement, increment } from '@/store/counterSlice';
-import { useAppSelector, useAppDispatch } from '@/store/hooks'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 
 const Contact = () => {
   const count = useAppSelector(state => state.counter.value)
