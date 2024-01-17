@@ -26,7 +26,9 @@
 //      "components/*": ["src/components/*"],
 //      "types/*": ["src/@types/*"],
 //      "public/*": ["public/*"]
-    }
+    },
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

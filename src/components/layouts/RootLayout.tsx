@@ -10,8 +10,9 @@ import {
   Layout,
 } from 'antd';
 
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 import SideBarLayout from "@/components/layouts/SideBarLayout"
+import HeaderLayout from "@/components/layouts/HeaderLayout";
 
 const RootLayout: FC = () => {
   const [marginLeft, setMarginLeft] = useState(200)
@@ -45,7 +46,6 @@ const RootLayout: FC = () => {
       <Sider
         collapsible
         onCollapse={(collapsed) => {
-          console.log(collapsed)
           if (collapsed) {
             setMarginLeft(80)
             setAppName('M4.0')
@@ -70,7 +70,7 @@ const RootLayout: FC = () => {
       </Sider>
       }
       <Layout style={{ marginLeft: marginLeft }}>
-        <Header style={{ padding: 0, background: '#ffffff' }} />
+        <HeaderLayout/>
         <Content>
           <Outlet></Outlet>
         </Content>

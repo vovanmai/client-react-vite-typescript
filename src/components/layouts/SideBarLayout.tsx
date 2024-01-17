@@ -1,40 +1,103 @@
 import {
-  FC,
+  FC, useEffect,
+  useState,
 } from 'react';
+
+import { keys } from "lodash"
+
+import { useMatch, useNavigate } from "react-router-dom";
 
 import {
   AppstoreOutlined,
+  CalculatorOutlined,
 } from '@ant-design/icons';
+
+import RouteNames, { mapActiveRoutes } from "@/configs/route-names"
 
 import { Menu } from "antd"
 
 const SideBarLayout: FC = () => {
+  const navigate = useNavigate();
+  const [openKeys, setOpenKeys] = useState<string[]>([])
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+
+  let activeRouteTest: {
+    selectedKeys: string[],
+    openKeys: string[]
+  } = {
+    selectedKeys: [],
+    openKeys: []
+  }
+  const testtt = keys(mapActiveRoutes)
+
+  if (testtt?.length > 0) {
+    for (let i = 0; i < testtt.length; i++) {
+      const match = useMatch(testtt[i])
+      if (match) {
+        console.log(mapActiveRoutes.test)
+        // activeRouteTest = mapActiveRoutes[testtt[i]]
+        break
+      }
+    }
+  }
+  // console.log(activeRouteTest)
+
+  useEffect(() => {
+    // setSelectedKeys(activeRouteTest.selectedKeys)
+    // setOpenKeys(activeRouteTest.openKeys)
+  }, [])
+
+  const menuData = [
+    {
+      key: RouteNames.STAFF_LIST,
+      label: 'Staffs',
+      icon: <AppstoreOutlined/>
+    },
+    {
+      key: RouteNames.TEST,
+      label: 'For test',
+      icon: <AppstoreOutlined/>
+    },
+    {
+      key: 'settings',
+      label: 'Settings',
+      icon: <CalculatorOutlined/>,
+      children: [
+        {
+          key: 'password',
+          label: 'password',
+          icon: <CalculatorOutlined/>,
+        }
+      ]
+    }
+  ]
+
+  const selectMenu = ({key}: {key: string}) => {
+    navigate(key)
+    const activeRoute = mapActiveRoutes[key]
+    setOpenKeys(activeRoute.openKeys)
+    setSelectedKeys(activeRoute.selectedKeys)
+  }
+
+  const selectSubMenu = (openKeys: string[]) => {
+    setOpenKeys(openKeys)
+  }
+
   return (
     <>
       <Menu
         style={{flex: 1, overflowY: "auto"}}
-        defaultOpenKeys={['1']}
-        defaultSelectedKeys={['1']}
+        selectedKeys={selectedKeys}
+        openKeys={openKeys}
         mode="inline"
         theme="dark"
+        items={menuData}
+        onClick={(data) => selectMenu(data)}
+        onOpenChange={(openKeys) => selectSubMenu(openKeys)}
       >
-        <Menu.SubMenu key="1" title="Settings" icon={<AppstoreOutlined/>}>
-          <Menu.Item key="2">Option 1</Menu.Item>
-          <Menu.Item key="3">Option 2</Menu.Item>
-          <Menu.SubMenu key="4" title="Sub-Menu">
-            <Menu.Item key="5">Option 3</Menu.Item>
-            <Menu.Item key="6">Option 4</Menu.Item>
-          </Menu.SubMenu>
-        </Menu.SubMenu>
-        <Menu.SubMenu key="7" title="Profile">
-          <Menu.Item key="8">Option 5</Menu.Item>
-          <Menu.Item key="9">Option 6</Menu.Item>
-          <Menu.Item key="10">Option 7</Menu.Item>
-          <Menu.Item key="11">Option 8</Menu.Item>
-        </Menu.SubMenu>
       </Menu>
     </>
   )
 }
 
-export default SideBarLayout
+export default SideBarLayout;

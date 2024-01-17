@@ -1,16 +1,26 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "@/components/layouts/RootLayout";
-import About from "@/components/About";
-import Test from "@/components/Test";
-import * as React from "react";
+import EmptyComponent from "@/components/EmptyComponent";
+import { lazy, Suspense } from "react";
 
-const Contact = React.lazy(() => import('@/components/Contact'));
-const Blog = React.lazy(() => import('@/components/Blog'));
-
-const check = (data:any) => {
-  console.log(data)
-  return true
+const lazyLoadComponent = (component: () => Promise<any>) => {
+  const Component = lazy(component);
+  return () => (
+    <Suspense fallback={<>loading...</>}>
+      <Component />
+    </Suspense>
+  )
 }
+
+const StaffList = lazyLoadComponent(() => import('@/views/staff/List'))
+const StaffCreate = lazyLoadComponent(() => import('@/views/staff/Create'))
+const StaffEdit = lazyLoadComponent(() => import('@/views/staff/Edit'))
+const Test = lazyLoadComponent(() => import('@/components/Test'))
+
+import RouteNames from "@/configs/route-names"
+import Home from "@/components/Home";
+import About from "@/components/About";
+import Contact from "@/components/Contact";
 
 const router = createBrowserRouter([
   {
@@ -18,28 +28,43 @@ const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        path: "",
-        element: (<h1>This is home pages</h1>),
-      },
-      {
-        path: "about",
-        element: <About/>,
-        loader: check
-      },
-      {
-        path: "blogs",
-        element: <Blog/>,
-      },
-      {
         path: "test",
         element: <Test/>,
       },
       {
-        path: "contact",
+        path: RouteNames.STAFF_LIST,
+        element: <EmptyComponent/>,
+        children: [
+          {
+            index: true,
+            element: <StaffList/>,
+          },
+          {
+            path: RouteNames.STAFF_CREATE,
+            element: <StaffCreate/>,
+          },
+          {
+            path: RouteNames.STAFF_EDIT,
+            element: <StaffEdit/>,
+          }
+        ]
+      },
+    ]
+  },
+  {
+    path: "home",
+    element: <Home/>,
+    children: [
+      {
+        path: 'contact',
         element: <Contact/>,
+      },
+      {
+        path: 'about',
+        element: <About/>,
       }
     ]
-  }
+  },
 ]);
 
 export default router
