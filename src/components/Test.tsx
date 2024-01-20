@@ -1,15 +1,22 @@
-import Parent from "@/components/Parent"
-import { useEffect } from "react";
+import { useState } from "react";
 
 const Test = () => {
-  useEffect(() => {
-  }, [])
+  const [counter, setCounter] = useState(0);
+
+  // 👇️ may return a value before hook below runs
+  if (counter > 0) {
+    return <h1>Hello world</h1>;
+  }
+
+  // ⛔️ Rendered fewer hooks than expected.
+  // This may be caused by an accidental early return statement
+  
+
   return (
-    <>
-      <h1>FOR TEST</h1>
-      <Parent></Parent>
-    </>
-  )
+    <div>
+      <button onClick={() => setCounter(counter + 1)}>Increment count</button>
+    </div>
+  );
 }
 
 export default Test

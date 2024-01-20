@@ -1,12 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "@/components/layouts/RootLayout";
-import EmptyComponent from "@/components/EmptyComponent";
 import { lazy, Suspense } from "react";
+import { Spin } from 'antd';
+const Loading = <Spin size="small"/>
+
 
 const lazyLoadComponent = (component: () => Promise<any>) => {
   const Component = lazy(component);
   return () => (
-    <Suspense fallback={<>loading...</>}>
+    <Suspense fallback={Loading}>
       <Component />
     </Suspense>
   )
@@ -15,45 +17,53 @@ const lazyLoadComponent = (component: () => Promise<any>) => {
 const StaffList = lazyLoadComponent(() => import('@/views/staff/List'))
 const StaffCreate = lazyLoadComponent(() => import('@/views/staff/Create'))
 const StaffEdit = lazyLoadComponent(() => import('@/views/staff/Edit'))
-const Test = lazyLoadComponent(() => import('@/components/Test'))
+const SettingPassword = lazyLoadComponent(() => import('@/views/setting/Password'))
+const Home = lazyLoadComponent(() => import('@/components/Home'))
+const NotFound = lazyLoadComponent(() => import('@/components/NotFound'))
 
-import RouteNames from "@/configs/route-names"
-import Home from "@/components/Home";
-import About from "@/components/About";
+import routeNames from "@/configs/route-names"
 import Contact from "@/components/Contact";
+import About from "@/components/About";
+import AuthLayout from "@/components/layouts/AuthLayout";
+const Login = lazyLoadComponent(() => import('@/views/auth/Login'))
+const Register = lazyLoadComponent(() => import('@/views/auth/Register'))
+const MyBankQR = lazyLoadComponent(() => import('@/views/MyBankQR'))
 
 const router = createBrowserRouter([
   {
-    path: "/",
     element: <RootLayout />,
     children: [
       {
-        path: "test",
-        element: <Test/>,
-      },
-      {
-        path: RouteNames.STAFF_LIST,
-        element: <EmptyComponent/>,
+        path: routeNames.staff.path,
         children: [
           {
-            index: true,
+            path: routeNames.staff.list.path,
             element: <StaffList/>,
           },
           {
-            path: RouteNames.STAFF_CREATE,
+            path: routeNames.staff.create.path,
             element: <StaffCreate/>,
           },
           {
-            path: RouteNames.STAFF_EDIT,
+            path: routeNames.staff.edit.path,
             element: <StaffEdit/>,
           }
+        ]
+      },
+      {
+        path: routeNames.setting.path,
+        children: [
+          {
+            path: routeNames.setting.password.path,
+            element: <SettingPassword/>,
+          },
         ]
       },
     ]
   },
   {
     path: "home",
-    element: <Home/>,
+    element: <Home />,
     children: [
       {
         path: 'contact',
@@ -62,8 +72,30 @@ const router = createBrowserRouter([
       {
         path: 'about',
         element: <About/>,
+      },
+    ]
+  },
+  {
+    path: 'auth',
+    element: <AuthLayout />,
+    children: [
+      {
+        index: true,
+        element: <Login/>
+      },
+      {
+        path: 'register',
+        element: <Register/>
       }
     ]
+  },
+  {
+    path: '',
+    element: <MyBankQR />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

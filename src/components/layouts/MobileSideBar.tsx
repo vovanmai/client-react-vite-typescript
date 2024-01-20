@@ -3,11 +3,11 @@ import {
   useState,
 } from 'react';
 
-import {
-  AppstoreOutlined,
-} from '@ant-design/icons';
-
 import { Drawer, Menu } from "antd"
+import menuData from '@/configs/menu'
+import {matchPath, useLocation, useNavigate} from "react-router-dom";
+import {keys} from "lodash";
+import {mapActiveRoutes} from "@/configs/route-names";
 interface PropType {
   visible: boolean,
   changeVisible: (isShow: boolean) => void,
@@ -20,6 +20,47 @@ const MobileSideBar: FC<PropType> = (
   }
   ) => {
   const [open, setOpen] = useState(visible);
+  const navigate = useNavigate();
+  const [openKeys, setOpenKeys] = useState<string[]>([])
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  const [activeRoute, setActiveRoute] = useState<any>(null)
+  const location = useLocation()
+
+  const handleSetActiveRoute = () => {
+    const routeKeys = keys(mapActiveRoutes)
+    for(let i = 0; i < routeKeys.length; i++) {
+      const match = matchPath(routeKeys[i], location.pathname)
+      if(match) {
+        setActiveRoute(mapActiveRoutes[routeKeys[i]])
+        break
+      }
+    }
+  }
+
+
+  useEffect(() => {
+    handleSetActiveRoute()
+  }, [location])
+
+  useEffect(() => {
+    if (activeRoute) {
+      setOpenKeys(activeRoute.openKeys)
+      setSelectedKeys(activeRoute.selectedKeys)
+    }
+  }, [activeRoute])
+
+  const selectMenu = ({key}: {key: string}): void => {
+    const activeRoute = mapActiveRoutes[key]
+    if (activeRoute) {
+      setActiveRoute(activeRoute)
+      navigate(key)
+      onClose()
+    }
+  }
+
+  const selectSubMenu = (keys: string[]) => {
+    setOpenKeys(keys)
+  }
 
   useEffect(() => {
     setOpen(visible)
@@ -41,25 +82,13 @@ const MobileSideBar: FC<PropType> = (
     >
       <Menu
         style={{flex: 1, overflowY: "auto"}}
-        defaultOpenKeys={['1']}
-        defaultSelectedKeys={['1']}
+        selectedKeys={selectedKeys}
+        openKeys={openKeys}
         mode="inline"
-      >
-        <Menu.SubMenu key="1" title="Settings" icon={<AppstoreOutlined/>}>
-          <Menu.Item key="2">Option 1</Menu.Item>
-          <Menu.Item key="3">Option 2</Menu.Item>
-          <Menu.SubMenu key="4" title="Sub-Menu">
-            <Menu.Item key="5">Option 3</Menu.Item>
-            <Menu.Item key="6">Option 4</Menu.Item>
-          </Menu.SubMenu>
-        </Menu.SubMenu>
-        <Menu.SubMenu key="7" title="Profile">
-          <Menu.Item key="8">Option 5</Menu.Item>
-          <Menu.Item key="9">Option 6</Menu.Item>
-          <Menu.Item key="10">Option 7</Menu.Item>
-          <Menu.Item key="11">Option 8</Menu.Item>
-        </Menu.SubMenu>
-      </Menu>
+        items={menuData}
+        onClick={(data) => selectMenu(data)}
+        onOpenChange={(openKeys) => selectSubMenu(openKeys)}
+      />
     </Drawer>
   )
 }

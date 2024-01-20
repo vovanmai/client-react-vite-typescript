@@ -1,18 +1,14 @@
 import {
-  FC, useEffect,
+  FC,
+  useEffect,
   useState,
 } from 'react';
 
 import { keys } from "lodash"
+import { useNavigate, useLocation, matchPath } from "react-router-dom";
+import { mapActiveRoutes } from "@/configs/route-names"
+import menuData from '@/configs/menu'
 
-import { useMatch, useNavigate } from "react-router-dom";
-
-import {
-  AppstoreOutlined,
-  CalculatorOutlined,
-} from '@ant-design/icons';
-
-import RouteNames, { mapActiveRoutes } from "@/configs/route-names"
 
 import { Menu } from "antd"
 
@@ -20,67 +16,43 @@ const SideBarLayout: FC = () => {
   const navigate = useNavigate();
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  const [activeRoute, setActiveRoute] = useState<any>(null)
+  const location = useLocation()
 
-  let activeRouteTest: {
-    selectedKeys: string[],
-    openKeys: string[]
-  } = {
-    selectedKeys: [],
-    openKeys: []
-  }
-  const testtt = keys(mapActiveRoutes)
-
-  if (testtt?.length > 0) {
-    for (let i = 0; i < testtt.length; i++) {
-      const match = useMatch(testtt[i])
-      if (match) {
-        console.log(mapActiveRoutes.test)
-        // activeRouteTest = mapActiveRoutes[testtt[i]]
+  const handleSetActiveRoute = () => {
+    const routeKeys = keys(mapActiveRoutes)
+    for(let i = 0; i < routeKeys.length; i++) {
+      const match = matchPath(routeKeys[i], location.pathname)
+      if(match) {
+        setActiveRoute(mapActiveRoutes[routeKeys[i]])
         break
       }
     }
   }
-  // console.log(activeRouteTest)
+
 
   useEffect(() => {
-    // setSelectedKeys(activeRouteTest.selectedKeys)
-    // setOpenKeys(activeRouteTest.openKeys)
-  }, [])
+    handleSetActiveRoute()
+  }, [location])
 
-  const menuData = [
-    {
-      key: RouteNames.STAFF_LIST,
-      label: 'Staffs',
-      icon: <AppstoreOutlined/>
-    },
-    {
-      key: RouteNames.TEST,
-      label: 'For test',
-      icon: <AppstoreOutlined/>
-    },
-    {
-      key: 'settings',
-      label: 'Settings',
-      icon: <CalculatorOutlined/>,
-      children: [
-        {
-          key: 'password',
-          label: 'password',
-          icon: <CalculatorOutlined/>,
-        }
-      ]
+  useEffect(() => {
+    if (activeRoute) {
+      setOpenKeys(activeRoute.openKeys)
+      setSelectedKeys(activeRoute.selectedKeys)
     }
-  ]
+  }, [activeRoute])
 
-  const selectMenu = ({key}: {key: string}) => {
-    navigate(key)
+  const selectMenu = ({key}: {key: string}): void => {
+    console.log(mapActiveRoutes, key)
     const activeRoute = mapActiveRoutes[key]
-    setOpenKeys(activeRoute.openKeys)
-    setSelectedKeys(activeRoute.selectedKeys)
+    if (activeRoute) {
+      setActiveRoute(activeRoute)
+      navigate(key)
+    }
   }
 
-  const selectSubMenu = (openKeys: string[]) => {
-    setOpenKeys(openKeys)
+  const selectSubMenu = (keys: string[]) => {
+    setOpenKeys(keys)
   }
 
   return (

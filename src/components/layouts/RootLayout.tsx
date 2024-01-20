@@ -17,8 +17,7 @@ import HeaderLayout from "@/components/layouts/HeaderLayout";
 const RootLayout: FC = () => {
   const [marginLeft, setMarginLeft] = useState(200)
   const [isShowSider, setIsShowSider] = useState(true)
-  const [appName, setAppName] = useState('Mana4.0')
-
+  const [appName, setAppName] = useState('Ana4.0')
 
   useEffect(() => {
     if (window.innerWidth > 768) {
@@ -62,8 +61,8 @@ const RootLayout: FC = () => {
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", height: "100%"}}>
-          <div style={{color: "#ffffff", height: "50px"}}>
-            <h1 style={{ textAlign: "center"}}>{ appName }</h1>
+          <div style={{color: "#ffffff", height: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+            <div style={{ textAlign: "center", fontSize: 25}}>{ appName }</div>
           </div>
           <SideBarLayout></SideBarLayout>
         </div>

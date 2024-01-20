@@ -1,38 +1,51 @@
 const routeNames = {
-  STAFF_LIST: 'staffs',
-  STAFF_CREATE: 'create',
-  STAFF_EDIT: 'edit/:id',
-  TEST: 'test',
+  staff: {
+    path: 'staffs',
+    key: 'staffs',
+    list: {
+      path: '',
+      key: 'staffs'
+    },
+    create: {
+      path: 'create',
+      key: 'staffs/create'
+    },
+    edit: {
+      path: 'edit/:id',
+      key: 'staffs/edit/:id'
+    },
+  },
+  setting: {
+    path: 'settings',
+    key: 'settings',
+    password: {
+      path: 'password',
+      key: 'settings/password'
+    },
+  },
 }
 
-const STAFF_LIST = 'staffs'
-const STAFF_CREATE = 'staffs/create'
-const STAFF_EDIT = 'staffs/edit/:id'
-const TEST = 'test'
-
-type Type = {
+export const mapActiveRoutes: {
   [key: string]: {
     selectedKeys: string[],
     openKeys: string[],
   }
-}
-
-export const mapActiveRoutes: Type = {
-  [STAFF_LIST]: {
-    selectedKeys: [STAFF_LIST],
+} = {
+  [routeNames.staff.list.key]: {
+    selectedKeys: [routeNames.staff.list.key],
     openKeys: [],
   },
-  [STAFF_CREATE]: {
-    selectedKeys: [STAFF_LIST],
+  [routeNames.staff.create.key]: {
+    selectedKeys: [routeNames.staff.list.key],
     openKeys: []
   },
-  [STAFF_EDIT]: {
-    selectedKeys: [STAFF_LIST],
+  [routeNames.staff.edit.key]: {
+    selectedKeys: [routeNames.staff.list.key],
     openKeys: []
   },
-  [TEST]: {
-    selectedKeys: [TEST],
-    openKeys: []
+  [routeNames.setting.password.key]: {
+    selectedKeys: [routeNames.setting.password.key],
+    openKeys: [routeNames.setting.key]
   },
 }
 
