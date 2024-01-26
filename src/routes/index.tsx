@@ -30,6 +30,7 @@ const MyBankQR = lazyLoadComponent(() => import('@/views/MyBankQR'))
 const ChatLayout = lazyLoadComponent(() => import('@/components/layouts/ChatLayout'))
 const ChatJoin = lazyLoadComponent(() => import('@/views/chat/Join'))
 const Channels = lazyLoadComponent(() => import('@/views/chat/Channels'))
+const Channel = lazyLoadComponent(() => import('@/views/chat/Channel'))
 
 const router = createBrowserRouter([
   {
@@ -102,6 +103,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Channels/>,
+          },
+          {
+            path: ':id',
+            element: <Channel/>,
           },
         ]
       },
