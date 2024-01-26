@@ -21,12 +21,22 @@ const MyBankQR: React.FC = () => {
           src={MyQRImage}
         />
         <div>
-          <Link to={"/auth"}>
-            <Button type="link" style={{padding: 0}}>
-              <LoginOutlined />
-              Đăng nhập
-            </Button>
-          </Link>
+          <div>
+            <Link to={"/auth"}>
+              <Button type="link" style={{padding: 0}}>
+                <LoginOutlined />
+                Đăng nhập
+              </Button>
+            </Link>
+          </div>
+          <div>
+            <Link to={"/chat/join"}>
+              <Button type="link" style={{padding: 0}}>
+                <LoginOutlined />
+                Go to chat
+              </Button>
+            </Link>
+          </div>
         </div>
       </Col>
     </Row>

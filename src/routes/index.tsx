@@ -1,9 +1,8 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Outlet } from "react-router-dom";
 import RootLayout from "@/components/layouts/RootLayout";
 import { lazy, Suspense } from "react";
 import { Spin } from 'antd';
 const Loading = <Spin size="small"/>
-
 
 const lazyLoadComponent = (component: () => Promise<any>) => {
   const Component = lazy(component);
@@ -28,6 +27,9 @@ import AuthLayout from "@/components/layouts/AuthLayout";
 const Login = lazyLoadComponent(() => import('@/views/auth/Login'))
 const Register = lazyLoadComponent(() => import('@/views/auth/Register'))
 const MyBankQR = lazyLoadComponent(() => import('@/views/MyBankQR'))
+const ChatLayout = lazyLoadComponent(() => import('@/components/layouts/ChatLayout'))
+const ChatJoin = lazyLoadComponent(() => import('@/views/chat/Join'))
+const Channels = lazyLoadComponent(() => import('@/views/chat/Channels'))
 
 const router = createBrowserRouter([
   {
@@ -87,6 +89,26 @@ const router = createBrowserRouter([
         path: 'register',
         element: <Register/>
       }
+    ]
+  },
+  {
+    path: 'chat',
+    element: <Outlet />,
+    children: [
+      {
+        path: '',
+        element: <ChatLayout/>,
+        children: [
+          {
+            index: true,
+            element: <Channels/>,
+          },
+        ]
+      },
+      {
+        path: 'join',
+        element: <ChatJoin/>,
+      },
     ]
   },
   {
