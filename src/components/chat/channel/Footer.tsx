@@ -19,6 +19,7 @@ const Footer = () => {
         >
           <Form.Item
             name="email"
+            style={{flex: 1}}
           >
             <Input
               className="w-100"
@@ -26,7 +27,7 @@ const Footer = () => {
             />
           </Form.Item>
 
-          <Form.Item style={{textAlign: "center"}}>
+          <Form.Item style={{margin: 0}}>
             <Button type="primary" htmlType="submit">
               <SendOutlined />
             </Button>

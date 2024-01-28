@@ -12,7 +12,7 @@ const Channels: React.FC = () => {
   return (
     <div className="w-100 h-100 d-flex" style={{ flexDirection: "column"}}>
       <Header/>
-      <div style={{borderRight: "1px solid #e1dbdb", borderLeft: "1px solid #e1dbdb", overflowY: "auto"}} className="flex-1">
+      <div style={{ overflowY: "auto"}} className="flex-1">
         {channels.length > 0 && channels.map((channel) => {
           return <Channel key={channel.id} channel={channel}></Channel>
         })}
