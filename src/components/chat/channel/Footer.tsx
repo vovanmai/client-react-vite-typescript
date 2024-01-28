@@ -22,13 +22,14 @@ const Footer = () => {
             style={{flex: 1}}
           >
             <Input
+              size="large"
               className="w-100"
               placeholder=""
             />
           </Form.Item>
 
           <Form.Item style={{margin: 0}}>
-            <Button type="primary" htmlType="submit">
+            <Button size="large" type="primary" htmlType="submit">
               <SendOutlined />
             </Button>
           </Form.Item>
