@@ -1,8 +1,17 @@
-import {Button, Form, Input} from "antd";
-import {SendOutlined} from "@ant-design/icons";
+import {Button, Form, Input} from "antd"
+import {SendOutlined} from "@ant-design/icons"
+import { useRef, useEffect } from "react";
+import type { InputRef } from 'antd';
 
 const Footer = () => {
+  const messageRef = useRef<InputRef>(null)
+  useEffect(() => {
+    messageRef.current?.focus()
+  }, []);
+  const [form] = Form.useForm();
   const onFinish = () => {
+    messageRef.current?.focus()
+    form.setFieldValue('message', '');
   };
 
   const onFinishFailed = () => {
@@ -10,6 +19,7 @@ const Footer = () => {
   return (
       <div style={{borderTop: "1px solid #e1dbdb", height: 60, padding: "0 5px" }} className="d-flex align-item-center">
         <Form
+          form={form}
           className="w-100"
           name="basic"
           onFinish={onFinish}
@@ -18,13 +28,14 @@ const Footer = () => {
           layout="inline"
         >
           <Form.Item
-            name="email"
+            name="message"
             style={{flex: 1}}
           >
             <Input
               size="large"
               className="w-100"
               placeholder=""
+              ref={messageRef}
             />
           </Form.Item>
 
