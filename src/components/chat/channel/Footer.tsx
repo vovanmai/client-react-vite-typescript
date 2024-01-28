@@ -1,13 +1,10 @@
 import {Button, Form, Input} from "antd"
 import {SendOutlined} from "@ant-design/icons"
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import type { InputRef } from 'antd';
 
 const Footer = () => {
   const messageRef = useRef<InputRef>(null)
-  useEffect(() => {
-    messageRef.current?.focus()
-  }, []);
   const [form] = Form.useForm();
   const onFinish = () => {
     messageRef.current?.focus()
