@@ -8,7 +8,7 @@ const Footer = () => {
   const onFinishFailed = () => {
   };
   return (
-      <div style={{borderTop: "1px solid #e1dbdb", height: 45, padding: "0 5px" }} className="d-flex align-item-center">
+      <div style={{borderTop: "1px solid #e1dbdb", height: 60, padding: "0 5px" }} className="d-flex align-item-center">
         <Form
           className="w-100"
           name="basic"
