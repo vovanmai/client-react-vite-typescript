@@ -27,12 +27,13 @@ const Channel = () => {
   })
 
   useEffect(() => {
+    const chatOn = (data: any) => {
+      console.log('data=>>>>>>', data)
+      setMessages((chat:any) => ([...chat, data]))
+    }
+    socket.on('channel_1', chatOn)
     return () => {
-      const chatOn = (data: any) => {
-        console.log('data=>>>>>>', data)
-        setMessages((chat:any) => ([...chat, data]))
-      }
-      socket.on('channel_1', chatOn)
+      socket.off('channel_1', chatOn)
     };
   }, [])
 
