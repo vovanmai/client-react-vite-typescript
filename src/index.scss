@@ -55,3 +55,11 @@ h6 {
 .align-item-center {
   align-items: center;
 }
+
+@media screen and (min-width: 768px) {
+  .chat-layout {
+    border-right: 1px solid rgb(225, 219, 219);
+    border-left: 1px solid rgb(225, 219, 219);
+  }
+}
+
