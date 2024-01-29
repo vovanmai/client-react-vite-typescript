@@ -30,15 +30,15 @@ const Channel = () => {
     const chatOn = (data: any) => {
       setMessages((chat:any) => ([...chat, data]))
     }
-    socket.on('channel_1', chatOn)
+    socket.on('channel', chatOn)
     return () => {
-      socket.off('channel_1', chatOn)
+      socket.off('channel', chatOn)
     };
   }, [])
 
   const onSubmitMessage = (data: any) => {
     setMessages([...messages, data])
-    socket.emit('channel_1', data)
+    socket.emit('channel', data)
   }
 
   return (
