@@ -5,6 +5,7 @@ import dataChannels from "@/configs/channels";
 import { useNavigate, useParams } from "react-router-dom";
 import { keyBy } from 'lodash'
 import {useEffect, useState} from "react";
+import socket from "@/socket";
 
 const Channel = () => {
   const params = useParams()
@@ -25,8 +26,19 @@ const Channel = () => {
     }
   })
 
+  useEffect(() => {
+    return () => {
+      const chatOn = (data: any) => {
+        console.log('data=>>>>>>', data)
+        setMessages((chat:any) => ([...chat, data]))
+      }
+      socket.on('channel_1', chatOn)
+    };
+  }, [])
+
   const onSubmitMessage = (data: any) => {
     setMessages([...messages, data])
+    socket.emit('channel_1', data)
   }
 
   return (
