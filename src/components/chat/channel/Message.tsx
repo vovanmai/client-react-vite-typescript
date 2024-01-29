@@ -13,7 +13,8 @@ const Message = (props: any) => {
               padding: 10,
               borderRadius: 7,
               background: "#14b8a6",
-              color: "#ffffff"
+              color: "#ffffff",
+              wordBreak: "break-word"
             }}
           >
             {message.message}
@@ -31,6 +32,7 @@ const Message = (props: any) => {
               minHeight: "40px",
               padding: 10,
               borderRadius: 7,
+              wordBreak: "break-word"
             }}
           >
             {message.message}
