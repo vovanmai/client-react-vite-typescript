@@ -1,5 +1,6 @@
 import Header from "@/components/chat/channel/Header";
 import Footer from "@/components/chat/channel/Footer";
+import Messages from "@/components/chat/channel/Messages";
 import dataChannels from "@/configs/channels";
 import { useNavigate, useParams } from "react-router-dom";
 import { keyBy } from 'lodash'
@@ -12,6 +13,7 @@ const Channel = () => {
     id: 0,
     name: '',
   })
+  const [messages, setMessages] = useState<any>([])
 
   useEffect(() => {
     const channels = keyBy(dataChannels, 'id')
@@ -23,13 +25,19 @@ const Channel = () => {
     }
   })
 
+  const onSubmitMessage = (data: any) => {
+    setMessages([...messages, data])
+  }
+
   return (
     <div className="w-100 h-100 d-flex" style={{ flexDirection: "column"}}>
       <Header channel={channel}/>
-      <div style={{ overflowY: "auto" }} className="flex-1">
-
-      </div>
-      <Footer/>
+      <Messages
+        messages={messages}
+      />
+      <Footer
+        onSubmitMessage={(data: any) => onSubmitMessage(data)}
+      />
     </div>
   );
 }

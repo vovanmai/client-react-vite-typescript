@@ -2,16 +2,23 @@ import {Button, Form, Input, message} from "antd"
 import {SendOutlined} from "@ant-design/icons"
 import { useRef } from "react";
 import type { InputRef } from 'antd';
+import { getRandomInteger } from "@/helpers/helper";
 
-const Footer = () => {
+const Footer = (props: any) => {
+  const { onSubmitMessage } = props
   const messageRef = useRef<InputRef>(null)
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const onFinish = (value: any) => {
-    const message = value.message.trim()
-    if (message !== '') {
+    const message = value.message?.trim()
+    if (message) {
       messageRef.current?.focus()
       form.setFieldValue('message', '');
+      onSubmitMessage({
+        message: message,
+        is_me: true,
+        id: getRandomInteger()
+      })
     } else {
       messageApi.open({
         type: 'error',
