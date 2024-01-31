@@ -1,22 +1,21 @@
-import { useState } from "react";
+import { useEffect } from "react";
 
 const Test = () => {
-  const [counter, setCounter] = useState(0);
+  useEffect(() => {
+    console.log(1)
 
-  // 👇️ may return a value before hook below runs
-  if (counter > 0) {
-    return <h1>Hello world</h1>;
-  }
 
-  // ⛔️ Rendered fewer hooks than expected.
-  // This may be caused by an accidental early return statement
-  
+    // return 1 function, sẽ được gọi ngay trước khi componentWillUnmount
+    return () => {
+      console.log('2')
+      const clickWindow = () => console.log('88888')
+      window.addEventListener('click', clickWindow)
 
-  return (
-    <div>
-      <button onClick={() => setCounter(counter + 1)}>Increment count</button>
-    </div>
-  );
+      // window.removeEventListener('click', clickWindow)
+    }
+  }, [])
+
+  return <div>F12 check log của trình duyệt!</div>
 }
 
 export default Test

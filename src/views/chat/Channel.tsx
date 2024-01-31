@@ -14,6 +14,7 @@ const Channel = () => {
     id: 0,
     name: '',
   })
+
   const [messages, setMessages] = useState<any>([])
 
   useEffect(() => {
@@ -24,20 +25,20 @@ const Channel = () => {
     } else {
       navigate('/chat')
     }
-  })
-
-  useEffect(() => {
     const chatOn = (data: any) => {
       setMessages((chat:any) => ([...chat, data]))
     }
-    socket.on('channel', chatOn)
+
+    const channelName = `channel_${channelItem.id}`
+    socket.on(channelName, chatOn)
     return () => {
-      socket.off('channel', chatOn)
+      socket.off(channelName)
     };
   }, [])
 
   const onSubmitMessage = (data: any) => {
     setMessages([...messages, data])
+    data.channel_id = channel.id
     socket.emit('channel', data)
   }
 
