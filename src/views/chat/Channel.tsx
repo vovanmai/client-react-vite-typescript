@@ -49,6 +49,7 @@ const Channel = () => {
         messages={messages}
       />
       <Footer
+        channel={channel}
         onSubmitMessage={(data: any) => onSubmitMessage(data)}
       />
     </div>

@@ -14,7 +14,7 @@ const Messages = (props: PropType) => {
   }, [messages]);
 
   return (
-    <div style={{ overflowY: "auto", padding: "10px 5px" }} className="flex-1">
+    <div style={{ overflowY: "auto", padding: "10px 5px 20px 5px" }} className="flex-1">
       {
         messages.length > 0 && messages.map((message) => {
           return <Message key={message.id} message={message}/>

@@ -1,21 +1,28 @@
-import { useEffect } from "react";
+import { useState } from "react";
+const fakeApi = () => console.log('Api is called')
 
 const Test = () => {
-  useEffect(() => {
-    console.log(1)
+  const [inputValue, setInputValue] = useState('')
+  const [timer, setTimer] = useState<any>(null)
 
+  const inputChanged = (e: any) => {
+    setInputValue(e.target.value)
 
-    // return 1 function, sẽ được gọi ngay trước khi componentWillUnmount
-    return () => {
-      console.log('2')
-      const clickWindow = () => console.log('88888')
-      window.addEventListener('click', clickWindow)
+    clearTimeout(timer)
 
-      // window.removeEventListener('click', clickWindow)
-    }
-  }, [])
+    const newTimer = setTimeout(() => {
+      fakeApi()
+    }, 500)
 
-  return <div>F12 check log của trình duyệt!</div>
+    setTimer(newTimer)
+  }
+
+  return (
+    <div>
+      <label>Input: </label>
+      <input value={inputValue} type="text" onChange={inputChanged} />
+    </div>
+  )
 }
 
 export default Test
