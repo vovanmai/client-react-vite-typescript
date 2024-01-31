@@ -11,7 +11,7 @@ const Message = (props: any) => {
               border: "1px solid #e4dbdb",
               minHeight: "40px",
               padding: 10,
-              borderRadius: 7,
+              borderRadius: 20,
               background: "#14b8a6",
               color: "#ffffff",
               wordBreak: "break-word"
@@ -31,7 +31,7 @@ const Message = (props: any) => {
               border: "1px solid #e4dbdb",
               minHeight: "40px",
               padding: 10,
-              borderRadius: 7,
+              borderRadius: 20,
               wordBreak: "break-word"
             }}
           >

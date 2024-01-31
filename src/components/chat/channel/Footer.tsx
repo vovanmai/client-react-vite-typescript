@@ -59,11 +59,15 @@ const Footer = (props: any) => {
       }, 800)
       setTimer(newTimer)
     } else {
-      const data = {
-        channel_id: channel.id,
-        is_typing: false,
-      }
-      socket.emit('typing', data)
+      clearTimeout(timer)
+      const newTimer = setTimeout(() => {
+        const data = {
+          channel_id: channel.id,
+          is_typing: false,
+        }
+        socket.emit('typing', data)
+      }, 800)
+      setTimer(newTimer)
     }
   }
   return (
