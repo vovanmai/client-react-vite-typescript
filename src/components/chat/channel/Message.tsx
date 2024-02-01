@@ -28,11 +28,12 @@ const Message = (props: any) => {
           <div
             style={{
               width: "70%",
-              border: "1px solid #e4dbdb",
+              border: "1px solid #edeaea",
               minHeight: "40px",
               padding: 10,
               borderRadius: 20,
-              wordBreak: "break-word"
+              wordBreak: "break-word",
+              background: "#F0F0F0"
             }}
           >
             {message.message}
