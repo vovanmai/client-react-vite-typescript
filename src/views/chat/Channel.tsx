@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { keyBy } from 'lodash'
 import {useEffect, useState} from "react";
 import socket from "@/socket";
+import Message from '@/request/Message'
 
 const Channel = () => {
   const params = useParams()
@@ -25,21 +26,31 @@ const Channel = () => {
     } else {
       navigate('/chat')
     }
+
+    // join channel
+    const channelName = `channel_${channelItem.id}`
+    socket.emit('join_channel', {channel_name: channelName})
+
     const chatOn = (data: any) => {
       setMessages((chat:any) => ([...chat, data]))
     }
 
-    const channelName = `channel_${channelItem.id}`
-    socket.on(channelName, chatOn)
+    socket.on('message', chatOn)
     return () => {
       socket.off(channelName)
+      socket.off('message')
     };
   }, [])
 
-  const onSubmitMessage = (data: any) => {
+  const onSubmitMessage = async (data: any) => {
     setMessages([...messages, data])
     data.channel_id = channel.id
-    socket.emit('channel', data)
+    data.socket_id = socket.id
+    try {
+      await Message.create(data)
+    } catch (e) {
+
+    }
   }
 
   return (
