@@ -13,7 +13,8 @@ export default class Http {
     }
 
     this.headers.Authorization = `Bearer`
-    this.baseURL = 'http://localhost:3007'
+    // this.baseURL = 'http://localhost:3007'
+    this.baseURL = 'https://express-chat-3ee4.onrender.com'
 
     this.api = axios.create({
       baseURL: this.baseURL,
@@ -36,7 +37,7 @@ export default class Http {
     this.api.interceptors.response.use(function (response) {
       // Any status code that lie within the range of 2xx cause this function to trigger
       // Do something with response data
-      return response;
+      return response.data;
     }, function (error) {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error

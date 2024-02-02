@@ -31,14 +31,14 @@ const Channel = () => {
     const channelName = `channel_${channelItem.id}`
     socket.emit('join_channel', {channel_name: channelName})
 
-    const chatOn = (data: any) => {
+    const receiveMessage = (data: any) => {
       setMessages((chat:any) => ([...chat, data]))
     }
 
-    socket.on('message', chatOn)
+    socket.on('receive_message', receiveMessage)
     return () => {
       socket.off(channelName)
-      socket.off('message')
+      socket.off('receive_message')
     };
   }, [])
 
@@ -47,9 +47,10 @@ const Channel = () => {
     data.channel_id = channel.id
     data.socket_id = socket.id
     try {
-      await Message.create(data)
+      const response:any = await Message.create(data)
+      socket.emit('send_message', response.data.data)
     } catch (e) {
-
+      console.log('onSubmitMessage error...')
     }
   }
 
