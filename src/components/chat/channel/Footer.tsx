@@ -32,17 +32,19 @@ const Footer = (props: any) => {
   };
 
   useEffect(() => {
-    const typingChannel = `typing_channel_${channel.id}`
-    socket.on(typingChannel, (isTyping) => {
-      setTyping(isTyping)
-    })
-    return () => {
-      const data = {
-        channel_id: channel.id,
-        is_typing: false,
+    if (channel.id) {
+      const typingChannel = `typing_channel_${channel.id}`
+      socket.on(typingChannel, (isTyping) => {
+        setTyping(isTyping)
+      })
+      return () => {
+        const data = {
+          channel_id: channel.id,
+          is_typing: false,
+        }
+        socket.emit('typing', data)
+        socket.off(typingChannel)
       }
-      socket.emit('typing', data)
-      socket.off(typingChannel)
     }
   }, [channel])
 

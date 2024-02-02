@@ -39,16 +39,31 @@ const Channel = () => {
     return () => {
       socket.off(channelName)
       socket.off('receive_message')
+      socket.off('join_channel')
+      socket.emit('leave_channel', channelName)
     };
   }, [])
 
+  useEffect(() => {
+    const handleTabClose = (event: any) => {
+      event.stopImmediatePropagation();
+      socket.emit('leave_channel', `channel_${channel.id}`)
+    };
+
+    window.addEventListener('beforeunload', handleTabClose);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleTabClose);
+    };
+  }, [channel]);
+
   const onSubmitMessage = async (data: any) => {
-    setMessages([...messages, data])
     data.channel_id = channel.id
     data.socket_id = socket.id
     try {
       const response:any = await Message.create(data)
       socket.emit('send_message', response.data.data)
+      setMessages([...messages, data])
     } catch (e) {
       console.log('onSubmitMessage error...')
     }
