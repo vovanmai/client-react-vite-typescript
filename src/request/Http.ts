@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from 'axios'
 
 export default class Http {
   public headers: any;
-  public baseURL: string;
+  public baseURL: any;
   public api: AxiosInstance;
   public prefix: string = '';
 
@@ -12,9 +12,12 @@ export default class Http {
       Accept: 'application/json',
     }
 
-    this.headers.Authorization = `Bearer`
-    // this.baseURL = 'http://localhost:3007'
-    this.baseURL = 'https://express-chat-3ee4.onrender.com'
+    const accessToken = window.localStorage.getItem('access_token')
+    if (accessToken) {
+      this.headers.Authorization = `Bearer ${accessToken}`
+    }
+    this.baseURL = process.env.API_URL
+    console.log(process.env.API_URL)
 
     this.api = axios.create({
       baseURL: this.baseURL,

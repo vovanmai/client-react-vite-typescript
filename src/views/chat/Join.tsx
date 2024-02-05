@@ -2,6 +2,7 @@ import React from 'react';
 import {Card, Button, Form, Input, message, Col, Row} from 'antd';
 import { UserOutlined, LoginOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import User from '@/request/User'
 
 const Join: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -15,8 +16,17 @@ const Join: React.FC = () => {
     navigate('/chat')
   };
 
-  const onFinish = () => {
-    success()
+  const onFinish = async (data: any) => {
+    try {
+      const response: any = await User.join(data)
+      window.localStorage.setItem('access_token', response.data.data.access_token)
+      success()
+    } catch (e) {
+      messageApi.open({
+        type: 'error',
+        content: 'Thất bại',
+      });
+    }
   };
 
   const onFinishFailed = () => {
@@ -41,7 +51,7 @@ const Join: React.FC = () => {
                 autoComplete="off"
             >
               <Form.Item
-                  name="email"
+                  name="username"
                   rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
               >
                 <Input
