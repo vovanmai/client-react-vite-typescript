@@ -1,11 +1,14 @@
+import { Avatar, Tooltip } from "antd";
+
 const Message = (props: any) => {
   const { message, currentUser } = props
-  const isMe = message.user_id === currentUser.id
+  const isMe = message.user_id === currentUser?.id
+  const avatarName = message.user.username.substring(0, 1).toUpperCase()
   return (
     <>
       {
         isMe
-        && (<div style={{display: "flex", justifyContent: "end", marginBottom: 5}}>
+        && (<div style={{display: "flex", justifyContent: "end", marginBottom: 10}}>
           <div
             style={{
               width: "70%",
@@ -25,7 +28,12 @@ const Message = (props: any) => {
 
       {
         !isMe
-        && (<div style={{display: "flex", justifyContent: "start", marginBottom: 5}}>
+        && (<div style={{display: "flex", justifyContent: "start", marginBottom: 10}}>
+          <div style={{marginRight: 10}}>
+            <Tooltip placement="top" title={message.user.username}>
+              <Avatar size="small" style={{ backgroundColor: '#87d068' }}>{avatarName}</Avatar>
+            </Tooltip>
+          </div>
           <div
             style={{
               width: "70%",

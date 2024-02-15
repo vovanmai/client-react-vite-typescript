@@ -74,7 +74,7 @@ const Channel = () => {
   }
 
   const getCurrentUser = () => {
-    return JSON.parse(window.localStorage.user)
+    return window.localStorage.user ? JSON.parse(window.localStorage.user) : null
   }
 
   return (
