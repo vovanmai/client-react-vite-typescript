@@ -23,6 +23,9 @@ const Channel = () => {
     const channelItem = channels[params.id ?? '']
     if (channelItem) {
       setChannel(channelItem)
+      Message.list(channelItem.id).then((response: any) => {
+        setMessages(response.data)
+      })
     } else {
       navigate('/chat')
     }
@@ -59,14 +62,19 @@ const Channel = () => {
 
   const onSubmitMessage = async (data: any) => {
     data.channel_id = channel.id
-    data.socket_id = socket.id
     try {
-      const response:any = await Message.create(data)
-      socket.emit('send_message', response.data.data)
-      setMessages([...messages, data])
+      const response:any = await Message.create(channel.id, {
+        message: data.message
+      })
+      socket.emit('send_message', response.data)
+      setMessages([...messages, response.data])
     } catch (e) {
       console.log('onSubmitMessage error...')
     }
+  }
+
+  const getCurrentUser = () => {
+    return JSON.parse(window.localStorage.user)
   }
 
   return (
@@ -74,6 +82,7 @@ const Channel = () => {
       <Header channel={channel}/>
       <Messages
         messages={messages}
+        current_user={getCurrentUser()}
       />
       <Footer
         channel={channel}

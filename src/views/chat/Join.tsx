@@ -19,9 +19,11 @@ const Join: React.FC = () => {
   const onFinish = async (data: any) => {
     try {
       const response: any = await User.join(data)
-      window.localStorage.setItem('access_token', response.data.data.access_token)
+      window.localStorage.setItem('access_token', response.data.access_token)
+      window.localStorage.setItem('user', JSON.stringify(response.data.user))
       success()
     } catch (e) {
+      console.log(e)
       messageApi.open({
         type: 'error',
         content: 'Thất bại',

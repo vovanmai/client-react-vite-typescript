@@ -1,21 +1,21 @@
 import Http from "@/request/Http";
 
 class Message extends Http {
-  public prefix:string = 'api/messages';
+  public prefix:string = 'api/channels';
 
-  public async create (data: any) {
+  public async create (channelId: number, data: any) {
     try {
-      return await this.post('', data)
+      return await this.post(`/${channelId}/messages`, data)
     } catch (e) {
-      return e
+      throw e
     }
   }
 
-  public async list () {
+  public async list (channelId: number) {
     try {
-      return await this.get('')
+      return await this.get(`/${channelId}/messages`)
     } catch (e) {
-      return e
+      throw e
     }
   }
 }

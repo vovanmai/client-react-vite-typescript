@@ -12,22 +12,24 @@ export default class Http {
       Accept: 'application/json',
     }
 
-    const accessToken = window.localStorage.getItem('access_token')
-    if (accessToken) {
-      this.headers.Authorization = `Bearer ${accessToken}`
-    }
     this.baseURL = process.env.API_URL
-    console.log(process.env.API_URL)
 
     this.api = axios.create({
       baseURL: this.baseURL,
       headers: this.headers
     });
+
+    this.requestInterceptor()
+    this.responseInterceptor()
   }
 
   public requestInterceptor () {
     this.api.interceptors.request.use(function (config) {
       // Do something before request is sent
+      const accessToken = window.localStorage.getItem('access_token')
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`
+      }
       return config;
     }, function (error) {
       // Do something with request error
@@ -37,14 +39,19 @@ export default class Http {
 
   public responseInterceptor () {
     // Add a response interceptor
-    this.api.interceptors.response.use(function (response) {
+    this.api.interceptors.response.use((response) => {
       // Any status code that lie within the range of 2xx cause this function to trigger
       // Do something with response data
       return response.data;
-    }, function (error) {
+    }, (error) => {
+      const status = error.response.status
+      switch (status) {
+        case 401:
+          window.location.href = '/chat/join'
+      }
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
-      return Promise.reject(error);
+      return Promise.reject(error.response.data);
     });
   }
 

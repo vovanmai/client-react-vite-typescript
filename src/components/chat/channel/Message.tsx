@@ -1,9 +1,10 @@
 const Message = (props: any) => {
-  const { message } = props
+  const { message, currentUser } = props
+  const isMe = message.user_id === currentUser.id
   return (
     <>
       {
-        message.is_me
+        isMe
         && (<div style={{display: "flex", justifyContent: "end", marginBottom: 5}}>
           <div
             style={{
@@ -23,7 +24,7 @@ const Message = (props: any) => {
       }
 
       {
-        !message.is_me
+        !isMe
         && (<div style={{display: "flex", justifyContent: "start", marginBottom: 5}}>
           <div
             style={{
