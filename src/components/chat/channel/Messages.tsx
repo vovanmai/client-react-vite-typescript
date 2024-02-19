@@ -1,6 +1,6 @@
 import Message from "@/components/chat/channel/Message"
 import InfiniteScroll from "react-infinite-scroll-component";
-// import { useRef, useEffect } from "react"
+import { Spin } from 'antd';
 
 type PropType = {
   messages: {message: string, is_me: boolean, id: number}[],
@@ -14,14 +14,18 @@ const Messages = (props: PropType) => {
   const fetchMoreData = () => {
     handleGetMessages()
   }
+
+  const loading = (<div style={{textAlign: "center", padding: "10px 0px"}}><Spin size="small" /></div>)
+  const noData = (<div style={{textAlign: "center", padding: "10px 0px", color: "gray"}}>Dữ liệu đã hết</div>)
   return (
     <div
-      id="scrollableDiv"
+      id="messages"
       style={{
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column-reverse',
-        flex: 1
+        flex: 1,
+        padding: "17px 7px"
       }}
     >
       <InfiniteScroll
@@ -30,13 +34,9 @@ const Messages = (props: PropType) => {
         dataLength={messages.length}
         next={fetchMoreData}
         hasMore={hasMoreData}
-        scrollableTarget="scrollableDiv"
-        loader={<h1>Loading...</h1>}
-        endMessage={
-          <p style={{ textAlign: "center" }}>
-            <b>Yay! You have seen it all</b>
-          </p>
-        }
+        scrollableTarget="messages"
+        loader={loading}
+        endMessage={noData}
       >
         {
           messages.length > 0 && messages.map((message) => {

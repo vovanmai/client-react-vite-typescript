@@ -80,6 +80,8 @@ const Channel = () => {
       })
       socket.emit('send_message', response.data)
       setMessages([response.data, ...messages])
+      const nestedElement = document.getElementsByClassName('infinite-scroll-component')[0]
+      nestedElement.scrollTo(0, nestedElement.scrollHeight + 50);
     } catch (e) {
       console.log('onSubmitMessage error...')
     }

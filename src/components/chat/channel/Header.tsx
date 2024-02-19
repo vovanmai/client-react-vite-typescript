@@ -1,5 +1,5 @@
 import { Avatar, Tooltip } from "antd";
-import { ArrowLeftOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 import socket from "@/socket";
@@ -24,9 +24,12 @@ const Header = ({channel}: any) => {
           <div style={{marginLeft: 10}}>{channel.name}</div>
         </div>
         <div>
-          <Tooltip placement="top" title={'Số lượng online bao gồm bạn'}>
-            <div style={{cursor: "pointer"}}><span style={{color: '#14b8a6'}}>Active: </span>{numberActiveUser}</div>
-          </Tooltip>
+          <div style={{cursor: "pointer"}}>
+            <span style={{color: '#14b8a6'}}>Active: </span>{numberActiveUser}
+            <Tooltip placement="top" title={'Số lượng online bao gồm bạn'}>
+              <InfoCircleOutlined style={{marginLeft: 5}} />
+            </Tooltip>
+          </div>
         </div>
       </div>
   );
