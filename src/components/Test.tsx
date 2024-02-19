@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
-import InfiniteScroll from 'react-infinite-scroll-component';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 import Message from "@/request/Message";
+
 const Test = () => {
   const [messages, setMessages] = useState<any>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -49,8 +50,10 @@ const Test = () => {
         let apiMessages = response.data
         if (direction === 'top') {
           apiMessages = apiMessages.reverse()
-          setMessages((oldArray: any) => oldArray.unshift(...apiMessages));
+          setMessages([...apiMessages, ...messages])
           setMinId(apiMessages.length > 0 ? apiMessages[0].id : null)
+          const element:any = document.getElementById('test')
+          element.scrollTo(0, 100)
         } else {
           setMessages([...messages, ...apiMessages])
           setMinId(apiMessages.length > 0 ? apiMessages[apiMessages.length - 1].id : null)

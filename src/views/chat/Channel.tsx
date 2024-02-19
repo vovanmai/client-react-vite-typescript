@@ -17,15 +17,27 @@ const Channel = () => {
   })
 
   const [messages, setMessages] = useState<any>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [minId, setMinId] = useState<any>(null)
+  const [hasMoreData, setHasMoreData] = useState<any>(true)
+
+  const getMessages = (channelId: any, params: any = {}) => {
+    if (isLoading) return
+    Message.list(channelId, params).then((response) => {
+      let apiMessages = response.data
+      setMessages([...messages, ...apiMessages])
+      setMinId(apiMessages.length > 0 ? apiMessages[apiMessages.length - 1].id : null)
+      setHasMoreData(apiMessages.length === 20)
+      setIsLoading(false)
+    })
+  }
 
   useEffect(() => {
     const channels = keyBy(dataChannels, 'id')
     const channelItem = channels[params.id ?? '']
     if (channelItem) {
       setChannel(channelItem)
-      Message.list(channelItem.id).then((response: any) => {
-        setMessages(response.data)
-      })
+      getMessages(channelItem.id)
     } else {
       navigate('/chat')
     }
@@ -35,7 +47,7 @@ const Channel = () => {
     socket.emit('join_channel', {channel_name: channelName})
 
     const receiveMessage = (data: any) => {
-      setMessages((chat:any) => ([...chat, data]))
+      setMessages((chat:any) => ([data, ...chat]))
     }
 
     socket.on('receive_message', receiveMessage)
@@ -67,7 +79,7 @@ const Channel = () => {
         message: data.message
       })
       socket.emit('send_message', response.data)
-      setMessages([...messages, response.data])
+      setMessages([response.data, ...messages])
     } catch (e) {
       console.log('onSubmitMessage error...')
     }
@@ -77,12 +89,18 @@ const Channel = () => {
     return window.localStorage.user ? JSON.parse(window.localStorage.user) : null
   }
 
+  const handleGetMessages = () => {
+    getMessages(channel.id, { min_id: minId })
+  }
+
   return (
     <div className="w-100 h-100 d-flex" style={{ flexDirection: "column"}}>
       <Header channel={channel}/>
       <Messages
         messages={messages}
-        current_user={getCurrentUser()}
+        currentUser={getCurrentUser()}
+        hasMoreData={hasMoreData}
+        handleGetMessages={handleGetMessages}
       />
       <Footer
         channel={channel}

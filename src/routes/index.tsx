@@ -32,6 +32,7 @@ const ChatJoin = lazyLoadComponent(() => import('@/views/chat/Join'))
 const Channels = lazyLoadComponent(() => import('@/views/chat/Channels'))
 const Channel = lazyLoadComponent(() => import('@/views/chat/Channel'))
 const Test = lazyLoadComponent(() => import('@/components/Test'))
+const Test2 = lazyLoadComponent(() => import('@/components/Test2'))
 
 const router = createBrowserRouter([
   {
@@ -124,6 +125,16 @@ const router = createBrowserRouter([
   {
     path: 'test',
     element: <Test />,
+  },
+  {
+    path: 'test2',
+    element: <ChatLayout/>,
+    children: [
+      {
+        path: 'test2',
+        element: <Test2 />,
+      }
+    ]
   },
   {
     path: "*",

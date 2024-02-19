@@ -11,9 +11,9 @@ class Message extends Http {
     }
   }
 
-  public async list (channelId: number) {
+  public async list (channelId: number, params = {}) {
     try {
-      return await this.get(`/${channelId}/messages`)
+      return await this.get(`/${channelId}/messages`, params)
     } catch (e) {
       throw e
     }
