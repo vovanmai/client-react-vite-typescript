@@ -8,12 +8,19 @@ const Join: React.FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const title = <h2 style={{textAlign: "center", color: "white"}}>Chat</h2>
   const navigate = useNavigate();
+  const previousURL = document.referrer;
+
   const success = () => {
     messageApi.open({
       type: 'success',
       content: 'Thanh cong',
     });
-    navigate('/chat')
+
+    if (previousURL) {
+      window.location.href = previousURL
+    } else {
+      navigate('/chat')
+    }
   };
 
   const onFinish = async (data: any) => {
