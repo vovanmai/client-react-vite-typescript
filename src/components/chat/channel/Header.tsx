@@ -43,7 +43,7 @@ const Header = (props: any) => {
           <Avatar size="large" style={{ backgroundColor: '#87d068' }}>{name}</Avatar>
           <div style={{marginLeft: 10}}>{channel.name}</div>
           <div style={{marginLeft: 5}}>
-            <Dropdown menu={{items, onClick: handleMenuClick,}} placement="bottomLeft" arrow>
+            <Dropdown menu={{items, onClick: handleMenuClick,}} placement="top" arrow>
               <SettingOutlined />
             </Dropdown>
           </div>

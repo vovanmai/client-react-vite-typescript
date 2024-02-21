@@ -46,25 +46,52 @@ const Channel = () => {
 
     // join channel
     const channelName = `channel_${channelItem.id}`
-    socket.emit('join_channel', {channel_name: channelName})
+    socket.emit('join_channel', {channel_name: channelName, user: getCurrentUser()})
 
-    const receiveMessage = (data: any) => {
+    socket.on('receive_message', (data: any) => {
       setMessages((chat:any) => ([data, ...chat]))
-    }
+    })
 
-    socket.on('receive_message', receiveMessage)
+    socket.on('user-just-joined', (data:any) => {
+      const user = data.user
+      messageApi.open({
+        type: 'success',
+        content: `${user.username} vừa vào channel này.`,
+      });
+    })
+
+    socket.on('user-just-leave', (data:any) => {
+      const user = data.user
+      messageApi.open({
+        type: 'error',
+        content: `${user.username} vừa rời khỏi channel này.`,
+      });
+    })
+
+    socket.on('remove-all-message', () => {
+      setMessages([])
+    })
     return () => {
       socket.off(channelName)
       socket.off('receive_message')
       socket.off('join_channel')
-      socket.emit('leave_channel', channelName)
+      socket.off('user-just-joined')
+      socket.off('user-just-leave')
+      socket.off('remove-all-message')
+      socket.emit('leave_channel', {
+        channel_name: channelName,
+        user: getCurrentUser()
+      })
     };
   }, [])
 
   useEffect(() => {
     const handleTabClose = (event: any) => {
       event.stopImmediatePropagation();
-      socket.emit('leave_channel', `channel_${channel.id}`)
+      socket.emit('leave_channel', {
+        channel_name: `channel_${channel.id}`,
+        user: getCurrentUser()
+      })
     };
 
     window.addEventListener('beforeunload', handleTabClose);
@@ -105,6 +132,9 @@ const Channel = () => {
         content: 'Xóa tất cả tin nhắn thành công.',
       });
       setMessages([])
+      socket.emit('remove-all-message', {
+        channel_name: `channel_${channel.id}`
+      })
     } catch (e) {
       console.log(e)
     }
