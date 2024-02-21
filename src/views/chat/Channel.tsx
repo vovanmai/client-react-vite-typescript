@@ -7,6 +7,7 @@ import { keyBy } from 'lodash'
 import {useEffect, useState} from "react";
 import socket from "@/socket";
 import Message from '@/request/Message'
+import {message} from "antd";
 
 const Channel = () => {
   const params = useParams()
@@ -20,6 +21,7 @@ const Channel = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [minId, setMinId] = useState<any>(null)
   const [hasMoreData, setHasMoreData] = useState<any>(true)
+  const [messageApi, contextHolder] = message.useMessage();
 
   const getMessages = (channelId: any, params: any = {}) => {
     if (isLoading) return
@@ -95,9 +97,26 @@ const Channel = () => {
     getMessages(channel.id, { min_id: minId })
   }
 
+  const handleRemoveMessages = async () => {
+    try {
+      await Message.deleteAll(channel.id)
+      messageApi.open({
+        type: 'success',
+        content: 'Xóa tất cả tin nhắn thành công.',
+      });
+      setMessages([])
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return (
     <div className="w-100 h-100 d-flex" style={{ flexDirection: "column"}}>
-      <Header channel={channel}/>
+      {contextHolder}
+      <Header
+        channel={channel}
+        handleRemoveMessages={handleRemoveMessages}
+      />
       <Messages
         messages={messages}
         currentUser={getCurrentUser()}

@@ -128,13 +128,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'test2',
-    element: <ChatLayout/>,
-    children: [
-      {
-        path: 'test2',
-        element: <Test2 />,
-      }
-    ]
+    element: <Test2/>,
   },
   {
     path: "*",

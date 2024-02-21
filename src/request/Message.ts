@@ -18,6 +18,14 @@ class Message extends Http {
       throw e
     }
   }
+
+  public async deleteAll (channelId: number, params = {}) {
+    try {
+      return await this.post(`/${channelId}/delete-all`, params)
+    } catch (e) {
+      throw e
+    }
+  }
 }
 
 export default new Message()
