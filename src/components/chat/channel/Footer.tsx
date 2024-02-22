@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import type { InputRef } from 'antd';
 import { getRandomInteger } from "@/helpers/helper";
 import socket from "@/socket";
+import PreviewImageBeforeSend from "@/components/chat/channel/PreviewImageBeforeSend";
 
 const Footer = (props: any) => {
   const { channel } = props
@@ -13,6 +14,7 @@ const Footer = (props: any) => {
   const [typing, setTyping] = useState<boolean>(false)
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+  const [images, setImages] = useState<any>([])
   const onFinish = (value: any) => {
     const message = value.message?.trim()
     if (message) {
@@ -72,10 +74,35 @@ const Footer = (props: any) => {
       setTimer(newTimer)
     }
   }
+
+  const handlePaste = async (event: any) => {
+    const clipboardData = event.clipboardData
+    const items = clipboardData.items;
+    for (const item of items) {
+      if (item.type.indexOf('image') !== -1) {
+        const blob = item.getAsFile();
+        const blobUrl = URL.createObjectURL(blob);
+        setImages([...images, blobUrl])
+      }
+    }
+  };
+
   return (
-      <div style={{borderTop: "1px solid #e1dbdb", height: 60, padding: "0 5px", position: "relative" }} className="d-flex align-item-center">
+      <div
+        style={{
+          borderTop: "1px solid #e1dbdb",
+          padding: 10,
+          position: "relative",
+          justifyContent: "center",
+          flexDirection: "column"
+        }}
+        className="d-flex"
+      >
         {contextHolder}
         { typing && <div style={{ position: "absolute", top: -21, color: "gray"}}>Someone is typing...</div>}
+        <PreviewImageBeforeSend
+          images={images}
+        />
         <Form
           form={form}
           className="w-100"
@@ -91,9 +118,10 @@ const Footer = (props: any) => {
             <Input
               size="large"
               className="w-100"
-              placeholder=""
+              placeholder="Vui lòng nhâp..."
               ref={messageRef}
               onKeyUp={(e) => onTyping(e)}
+              onPaste={handlePaste}
             />
           </Form.Item>
 

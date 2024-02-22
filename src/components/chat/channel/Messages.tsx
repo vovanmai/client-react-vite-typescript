@@ -1,19 +1,27 @@
 import Message from "@/components/chat/channel/Message"
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Spin } from 'antd';
+import {useEffect} from "react";
 
 type PropType = {
   messages: {message: string, is_me: boolean, id: number}[],
   currentUser: any,
   hasMoreData: boolean,
-  handleGetMessages: any
+  handleGetMessages: any,
+  change: number,
 }
 
 const Messages = (props: PropType) => {
-  const { messages, hasMoreData, handleGetMessages } = props
+  const { messages, hasMoreData, handleGetMessages, change } = props
   const fetchMoreData = () => {
     handleGetMessages()
   }
+
+  useEffect(() => {
+    const element:any = document.getElementById('scroll-into-view')
+    console.log(123)
+    element.scrollIntoView({ behavior: 'smooth' })
+  }, [change])
 
   const loading = (<div style={{textAlign: "center", padding: "10px 0px"}}><Spin size="small" /></div>)
   const noData = (<div style={{textAlign: "center", padding: "10px 0px", color: "gray"}}>Dữ liệu đã hết</div>)
@@ -38,6 +46,7 @@ const Messages = (props: PropType) => {
         loader={loading}
         endMessage={noData}
       >
+        <div id="scroll-into-view"></div>
         {
           messages.length > 0 && messages.map((message) => {
             return <Message

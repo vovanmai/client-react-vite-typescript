@@ -22,6 +22,7 @@ const Channel = () => {
   const [minId, setMinId] = useState<any>(null)
   const [hasMoreData, setHasMoreData] = useState<any>(true)
   const [messageApi, contextHolder] = message.useMessage();
+  const [change, setChange] = useState(0)
 
   const getMessages = (channelId: any, params: any = {}) => {
     if (isLoading) return
@@ -109,8 +110,7 @@ const Channel = () => {
       })
       socket.emit('send_message', response.data)
       setMessages([response.data, ...messages])
-      const nestedElement = document.getElementsByClassName('infinite-scroll-component')[0]
-      nestedElement.scrollTo(0, nestedElement.scrollHeight + 50);
+      setChange(change + 1)
     } catch (e) {
       console.log('onSubmitMessage error...')
     }
@@ -152,6 +152,7 @@ const Channel = () => {
         currentUser={getCurrentUser()}
         hasMoreData={hasMoreData}
         handleGetMessages={handleGetMessages}
+        change={change}
       />
       <Footer
         channel={channel}
