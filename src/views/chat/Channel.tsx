@@ -7,6 +7,7 @@ import { keyBy } from 'lodash'
 import {useEffect, useState} from "react";
 import socket from "@/socket";
 import Message from '@/request/Message'
+import Upload from '@/request/Upload'
 import {message} from "antd";
 
 const Channel = () => {
@@ -103,10 +104,22 @@ const Channel = () => {
   }, [channel]);
 
   const onSubmitMessage = async (data: any) => {
-    data.channel_id = channel.id
+    const { message, images} = data
+
+    if (images.length > 0) {
+      return sendByImages(images)
+    }
+
+    if (message) {
+      return sendByText(message)
+    }
+  }
+
+  const sendByText = async (text: any) => {
     try {
       const response:any = await Message.create(channel.id, {
-        message: data.message
+        message: text,
+        type: 'text'
       })
       socket.emit('send_message', response.data)
       setMessages([response.data, ...messages])
@@ -114,6 +127,33 @@ const Channel = () => {
     } catch (e) {
       console.log('onSubmitMessage error...')
     }
+  }
+
+  const sendByImages = async (images: any) => {
+    let promise: any = []
+    for (const image of images) {
+      const file = image.content
+      let formData = new FormData();
+      formData.append('file', file);
+
+      promise.push(Upload.uploadFile(formData))
+    }
+
+    Promise.all(promise).then(async (response) => {
+      try {
+        const data = response.map((item: any) => {return item.data.path})
+        const result:any = await Message.create(channel.id, {
+          images: data,
+          type: 'image'
+        })
+        console.log(result)
+
+      } catch (e) {
+        console.log(e)
+      }
+    }).catch((error) => {
+      console.log(error)
+    })
   }
 
   const getCurrentUser = () => {

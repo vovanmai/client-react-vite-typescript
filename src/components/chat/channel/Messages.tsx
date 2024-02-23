@@ -1,7 +1,7 @@
 import Message from "@/components/chat/channel/Message"
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Spin } from 'antd';
-import {useEffect} from "react";
+import { useEffect } from "react";
 
 type PropType = {
   messages: {message: string, is_me: boolean, id: number}[],
@@ -19,7 +19,6 @@ const Messages = (props: PropType) => {
 
   useEffect(() => {
     const element:any = document.getElementById('scroll-into-view')
-    console.log(123)
     element.scrollIntoView({ behavior: 'smooth' })
   }, [change])
 

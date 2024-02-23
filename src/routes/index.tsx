@@ -33,6 +33,7 @@ const Channels = lazyLoadComponent(() => import('@/views/chat/Channels'))
 const Channel = lazyLoadComponent(() => import('@/views/chat/Channel'))
 const Test = lazyLoadComponent(() => import('@/components/Test'))
 const Test2 = lazyLoadComponent(() => import('@/components/Test2'))
+const Test3 = lazyLoadComponent(() => import('@/components/Test3'))
 
 const router = createBrowserRouter([
   {
@@ -129,6 +130,10 @@ const router = createBrowserRouter([
   {
     path: 'test2',
     element: <Test2/>,
+  },
+  {
+    path: 'test3',
+    element: <Test3/>,
   },
   {
     path: "*",

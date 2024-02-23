@@ -13,17 +13,19 @@ const PreviewImageBeforeSend = (props: any) => {
             }}
           >
             {
-              images.map((item: any) => {
+              images.map((item: any, index: number) => {
                 return <div
+                  key={index}
                   style={{
                     border: "1px solid #d6dbe1",
                     borderRadius: 3,
                     height: 100,
                     display: "inline-block",
+                    backgroundPosition: 'center center',
                     marginRight: 5,
                     marginBottom: 2,
                     width: 100,
-                    backgroundImage: `url("${item}")`,
+                    backgroundImage: `url("${item.blob_url}")`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover"
                   }}>

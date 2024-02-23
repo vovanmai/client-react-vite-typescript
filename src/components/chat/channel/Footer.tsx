@@ -2,7 +2,6 @@ import {Button, Form, Input, message} from "antd"
 import {SendOutlined} from "@ant-design/icons"
 import {useEffect, useRef, useState} from "react";
 import type { InputRef } from 'antd';
-import { getRandomInteger } from "@/helpers/helper";
 import socket from "@/socket";
 import PreviewImageBeforeSend from "@/components/chat/channel/PreviewImageBeforeSend";
 
@@ -17,13 +16,12 @@ const Footer = (props: any) => {
   const [images, setImages] = useState<any>([])
   const onFinish = (value: any) => {
     const message = value.message?.trim()
-    if (message) {
+    if (message || images.length > 0) {
       messageRef.current?.focus()
       form.setFieldValue('message', '');
       onSubmitMessage({
         message: message,
-        is_me: true,
-        id: getRandomInteger()
+        images: images
       })
     } else {
       messageApi.open({
@@ -82,7 +80,11 @@ const Footer = (props: any) => {
       if (item.type.indexOf('image') !== -1) {
         const blob = item.getAsFile();
         const blobUrl = URL.createObjectURL(blob);
-        setImages([...images, blobUrl])
+        const image = {
+          blob_url: blobUrl,
+          content: blob
+        }
+        setImages([...images, image])
       }
     }
   };
